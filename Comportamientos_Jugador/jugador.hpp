@@ -58,6 +58,7 @@ class ComportamientoJugador : public Comportamiento{
     int sneakers_position;
     int passageway_position;
 
+    void current_position_checks(Sensores sensors);
 
     Action act_turn_sl();
 

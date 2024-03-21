@@ -5,20 +5,14 @@ using namespace std;
 Action ComportamientoJugador::think(Sensores sensors){
 	Action action = actIDLE;
 
-	if(sensors.reset) reset();
-
 	last_action_effect();
 
-	if(!has_bikini && sensors.terreno[0] == 'K') has_bikini = true;
-
-	if(!has_sneakers && sensors.terreno[0] == 'D') has_sneakers = true;
-
-	if((!know_my_position && sensors.terreno[0] == 'G') || sensors.nivel == 0) start_exploration(sensors);
+	current_position_checks(sensors);
 
 	if(know_my_position) update_map(sensors);
 
+	// ** Choose next action **
 	check_if_charging_mode(sensors);
-
 
 	if(have_pending_action){
 		
@@ -41,6 +35,17 @@ Action ComportamientoJugador::think(Sensores sensors){
 	print_debug_sensors_and_agent_data(sensors);	
 	last_action = action;
 	return action;
+}
+
+
+void ComportamientoJugador::current_position_checks(Sensores sensors){
+	if(sensors.reset) reset();
+
+	if(!has_bikini && sensors.terreno[0] == 'K') has_bikini = true;
+
+	if(!has_sneakers && sensors.terreno[0] == 'D') has_sneakers = true;
+
+	if((!know_my_position && sensors.terreno[0] == 'G') || sensors.nivel == 0) start_exploration(sensors);
 }
 
 
