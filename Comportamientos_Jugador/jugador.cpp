@@ -11,26 +11,24 @@ Action ComportamientoJugador::think(Sensores sensors){
 
 	if(know_my_position) update_map(sensors);
 
-	// ** Choose next action **
 	check_if_charging_mode(sensors);
 
 	if(have_pending_action){
-		
+
 		action = pending_action;
 		have_pending_action = false;
 
 	}else{
 
 		set_target_position(sensors);
-		
+
 		if(has_target_position()){
-			action = advance_to_target_position(target_position, sensors);
+			action = advance_to_target_position(target_position, sensors);		
 		}else{
-			action = random_movement(sensors);
+			action = random_movement(sensors);	
 		}
 
 	}
-
 
 	print_debug_sensors_and_agent_data(sensors);	
 	last_action = action;
@@ -79,9 +77,6 @@ Action ComportamientoJugador::random_movement(Sensores sensors){
 		default:
 			if(is_traversable_position(2, sensors)){
 				action = actWALK;
-				if(is_traversable_position(6, sensors)){
-					action = actRUN;
-				}
 			}else{
 				action = actTURN_L;
 			}
@@ -233,7 +228,9 @@ void ComportamientoJugador::update_map(Sensores sensors){
 			mapaResultado[row][col] = sensors.terreno[0];
 			for(int i=1; i<=3; i++){
 				for(int j=i; j>=-i; j--){
-					mapaResultado[row-i][col-j] = sensors.terreno[k];
+					if(sensors.nivel != 3 || (sensors.nivel == 3 && k!=6 && k!=11 && k!=12 && k!=13)){
+						mapaResultado[row-i][col-j] = sensors.terreno[k];
+					}
 					k++;
 				}
 			}
@@ -247,14 +244,16 @@ void ComportamientoJugador::update_map(Sensores sensors){
 			mapaResultado[row][col+1] = sensors.terreno[3];
 			mapaResultado[row-2][col] = sensors.terreno[4];
 			mapaResultado[row-2][col+1] = sensors.terreno[5];
-			mapaResultado[row-2][col+2] = sensors.terreno[6];
 			mapaResultado[row-1][col+2] = sensors.terreno[7];
 			mapaResultado[row][col+2] = sensors.terreno[8];
 			mapaResultado[row-3][col] = sensors.terreno[9];
 			mapaResultado[row-3][col+1] = sensors.terreno[10];
-			mapaResultado[row-3][col+2] = sensors.terreno[11];
-			mapaResultado[row-3][col+3] = sensors.terreno[12];
-			mapaResultado[row-2][col+3] = sensors.terreno[13];
+			if(sensors.nivel != 3){
+				mapaResultado[row-2][col+2] = sensors.terreno[6];
+				mapaResultado[row-3][col+2] = sensors.terreno[11];
+				mapaResultado[row-3][col+3] = sensors.terreno[12];
+				mapaResultado[row-2][col+3] = sensors.terreno[13];
+			}
 			mapaResultado[row-1][col+3] = sensors.terreno[14];
 			mapaResultado[row][col+3] = sensors.terreno[15];
 			
@@ -265,7 +264,9 @@ void ComportamientoJugador::update_map(Sensores sensors){
 			mapaResultado[row][col] = sensors.terreno[0];
 			for(int i=1; i<=3; i++){
 				for(int j=i; j>=-i; j--){
-					mapaResultado[row-j][col+i] = sensors.terreno[k];
+					if(sensors.nivel != 3 || (sensors.nivel == 3 && k!=6 && k!=11 && k!=12 && k!=13)){
+						mapaResultado[row-j][col+i] = sensors.terreno[k];
+					}
 					k++;
 				}
 			}
@@ -277,15 +278,17 @@ void ComportamientoJugador::update_map(Sensores sensors){
 			mapaResultado[row+1][col+1] = sensors.terreno[2];
 			mapaResultado[row+1][col] = sensors.terreno[3];
 			mapaResultado[row][col+2] = sensors.terreno[4];
-			mapaResultado[row+1][col+2] = sensors.terreno[5];
-			mapaResultado[row+2][col+2] = sensors.terreno[6];
+			mapaResultado[row+1][col+2] = sensors.terreno[5];			
 			mapaResultado[row+2][col+1] = sensors.terreno[7];
 			mapaResultado[row+2][col] = sensors.terreno[8];
 			mapaResultado[row][col+3] = sensors.terreno[9];
 			mapaResultado[row+1][col+3] = sensors.terreno[10];
-			mapaResultado[row+2][col+3] = sensors.terreno[11];
-			mapaResultado[row+3][col+3] = sensors.terreno[12];
-			mapaResultado[row+3][col+2] = sensors.terreno[13];
+			if(sensors.nivel != 3){
+				mapaResultado[row+2][col+2] = sensors.terreno[6];
+				mapaResultado[row+2][col+3] = sensors.terreno[11];
+				mapaResultado[row+3][col+3] = sensors.terreno[12];
+				mapaResultado[row+3][col+2] = sensors.terreno[13];
+			}
 			mapaResultado[row+3][col+1] = sensors.terreno[14];
 			mapaResultado[row+3][col] = sensors.terreno[15];
 			
@@ -296,7 +299,9 @@ void ComportamientoJugador::update_map(Sensores sensors){
 			mapaResultado[row][col] = sensors.terreno[0];
 			for(int i=1; i<=3; i++){
 				for(int j=i; j>=-i; j--){
-					mapaResultado[row+i][col+j] = sensors.terreno[k];
+					if(sensors.nivel != 3 || (sensors.nivel == 3 && k!=6 && k!=11 && k!=12 && k!=13)){
+						mapaResultado[row+i][col+j] = sensors.terreno[k];
+					}
 					k++;
 				}
 			}
@@ -309,15 +314,17 @@ void ComportamientoJugador::update_map(Sensores sensors){
 			mapaResultado[row+1][col-1] = sensors.terreno[2];
 			mapaResultado[row][col-1] = sensors.terreno[3];
 			mapaResultado[row+2][col] = sensors.terreno[4];
-			mapaResultado[row+2][col-1] = sensors.terreno[5];
-			mapaResultado[row+2][col-2] = sensors.terreno[6];
+			mapaResultado[row+2][col-1] = sensors.terreno[5];			
 			mapaResultado[row+1][col-2] = sensors.terreno[7];
 			mapaResultado[row][col-2] = sensors.terreno[8];
 			mapaResultado[row+3][col] = sensors.terreno[9];
 			mapaResultado[row+3][col-1] = sensors.terreno[10];
-			mapaResultado[row+3][col-2] = sensors.terreno[11];
-			mapaResultado[row+3][col-3] = sensors.terreno[12];
-			mapaResultado[row+2][col-3] = sensors.terreno[13];
+			if(sensors.nivel != 3){
+				mapaResultado[row+2][col-2] = sensors.terreno[6];
+				mapaResultado[row+3][col-2] = sensors.terreno[11];
+				mapaResultado[row+3][col-3] = sensors.terreno[12];
+				mapaResultado[row+2][col-3] = sensors.terreno[13];
+			}
 			mapaResultado[row+1][col-3] = sensors.terreno[14];
 			mapaResultado[row][col-3] = sensors.terreno[15];
 			
@@ -328,7 +335,9 @@ void ComportamientoJugador::update_map(Sensores sensors){
 			mapaResultado[row][col] = sensors.terreno[0];
 			for(int i=1; i<=3; i++){
 				for(int j=i; j>=-i; j--){
-					mapaResultado[row+j][col-i] = sensors.terreno[k];
+					if(sensors.nivel != 3 || (sensors.nivel == 3 && k!=6 && k!=11 && k!=12 && k!=13)){
+						mapaResultado[row+j][col-i] = sensors.terreno[k];				
+					}
 					k++;
 				}
 			}
@@ -341,14 +350,16 @@ void ComportamientoJugador::update_map(Sensores sensors){
 			mapaResultado[row-1][col] = sensors.terreno[3];
 			mapaResultado[row][col-2] = sensors.terreno[4];
 			mapaResultado[row-1][col-2] = sensors.terreno[5];
-			mapaResultado[row-2][col-2] = sensors.terreno[6];
 			mapaResultado[row-2][col-1] = sensors.terreno[7];
 			mapaResultado[row-2][col] = sensors.terreno[8];
 			mapaResultado[row][col-3] = sensors.terreno[9];
 			mapaResultado[row-1][col-3] = sensors.terreno[10];
-			mapaResultado[row-2][col-3] = sensors.terreno[11];
-			mapaResultado[row-3][col-3] = sensors.terreno[12];
-			mapaResultado[row-3][col-2] = sensors.terreno[13];
+			if(sensors.nivel != 3){
+				mapaResultado[row-2][col-2] = sensors.terreno[6];
+				mapaResultado[row-2][col-3] = sensors.terreno[11];
+				mapaResultado[row-3][col-3] = sensors.terreno[12];
+				mapaResultado[row-3][col-2] = sensors.terreno[13];
+			}
 			mapaResultado[row-3][col-1] = sensors.terreno[14];
 			mapaResultado[row-3][col] = sensors.terreno[15];
 			
@@ -447,26 +458,32 @@ void ComportamientoJugador::set_target_position(Sensores sensors){
 	identify_interesting_positions(sensors);
 
 	//If see several interesting positions, select the one that seems to
-	//have the highest priority as the target. 
+	//have the highest priority as the target.
+	
+	// TODO 
+	//if(know_my_position){
+	//	target_position = nearby_area_to_explore(sensors);
+	//}
+
+	if(passageway_position != NULL_POSITION){
+		target_position = passageway_position;
+	}
+
+	if(sneakers_position != NULL_POSITION){
+		target_position = sneakers_position;
+	}
+
+	if(bikini_position != NULL_POSITION){
+		target_position = bikini_position;
+	}
+	
+	if(orientation_position != NULL_POSITION){
+		target_position = orientation_position;
+	}
+
 	if(recharge_position != NULL_POSITION && sensors.bateria < MINIMUM_BATTERY){
 		battery_before_recharge = sensors.bateria;
 		target_position = recharge_position;
-	}else{
-		if(orientation_position != NULL_POSITION){
-			target_position = orientation_position;
-		}else{
-			if(bikini_position != NULL_POSITION){
-				target_position = bikini_position;
-			}else{
-				if(sneakers_position != NULL_POSITION){
-					target_position = sneakers_position;
-				}else{
-					if(passageway_position != NULL_POSITION){
-						target_position = passageway_position;
-					}
-				}
-			}
-		}
 	}
 }
 
@@ -502,6 +519,20 @@ int ComportamientoJugador::search_passageways(Sensores sensors){
 		(sensors.terreno[3] == 'M' || sensors.terreno[3] == 'P')){
 			passageway_position = 2;
 		}
+
+		if(sensors.nivel == 3){
+			if((sensors.terreno[1] == 'M' || sensors.terreno[1] == 'P') && 
+			is_traversable_position(5, sensors)){
+					
+				passageway_position = 5;
+			}
+			
+			if((sensors.terreno[3] == 'M' || sensors.terreno[3] == 'P') && 
+			is_traversable_position(7, sensors)){
+				
+				passageway_position = 7;
+			}
+		}
 	}
 
 	return passageway_position;
@@ -517,6 +548,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(1, sensors)){
 				action = act_turn_sl();
 				target_position = 2;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}							
 			break;
 
@@ -524,6 +560,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(2, sensors)){
 				action = actWALK;
 				target_position = NULL_POSITION;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -531,6 +572,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(3, sensors)){
 				action = actTURN_SR;
 				target_position = 2;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -538,6 +584,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(1, sensors)){
 				action = act_turn_sl();
 				target_position = 6;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -556,10 +607,14 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			break;
 
 		case 6:
-			if(is_traversable_position(2, sensors) &&
-			is_traversable_position(6, sensors)){
-				action = actRUN;
+			if(is_traversable_position(2, sensors)){
+				action = actWALK;
+				target_position = 2;
+			}else{
 				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -567,6 +622,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(2, sensors)){
 				action = actWALK;
 				target_position = 3;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -574,6 +634,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(3, sensors)){
 				action = actTURN_SR;
 				target_position = 6;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -581,6 +646,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(1, sensors)){
 				action = act_turn_sl();
 				target_position = 12;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -588,6 +658,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(2, sensors)){
 				action = actWALK;
 				target_position = 4;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -595,6 +670,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(2, sensors)){
 				action = actWALK;
 				target_position = 5;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -602,6 +682,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(2, sensors)){
 				action = actWALK;
 				target_position = 6;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -609,6 +694,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(2, sensors)){
 				action = actWALK;
 				target_position = 7;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -616,6 +706,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(2, sensors)){
 				action = actWALK;
 				target_position = 8;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -623,6 +718,11 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 			if(is_traversable_position(3, sensors)){
 				action = actTURN_SR;
 				target_position = 12;
+			}else{
+				target_position = NULL_POSITION;
+				action = actTURN_L;
+				pending_action = actTURN_L;
+				have_pending_action = true;
 			}
 			break;
 
@@ -635,6 +735,7 @@ Action ComportamientoJugador::advance_to_target_position(int target_position, Se
 bool ComportamientoJugador::is_traversable_position(int position, Sensores sensors){
 	return (sensors.terreno[position] != 'P' && 
 			sensors.terreno[position] != 'M' &&
+			sensors.terreno[position] != '?' &&
 			sensors.agentes[position] == '_');
 }
 
@@ -644,6 +745,154 @@ void ComportamientoJugador::check_if_charging_mode(Sensores sensors){
 		have_pending_action = true;
 		pending_action = actIDLE;
 	}
+}
+
+
+bool ComportamientoJugador::is_front_unknown(){
+
+	int i;
+	int j;
+
+	//Conmprobamos si no hemos explorado la fila siguiente a vision
+	switch(current_state.compass){
+
+		case 0://Norte
+
+			for(int k=-3; k<=3; k++){
+				
+				i =current_state.row-4;
+				j =current_state.col+k;
+
+				if(i<0){
+					i = 0;
+				}
+
+				if(j<0){
+					j = 0;
+				}
+				
+				if(i==map_size){
+					i = map_size-1;
+				}
+
+				if(j==map_size){
+					j = map_size-1;
+				}
+
+				if(mapaResultado[i][j] == '?'){
+					return true;
+				}
+			}
+
+			break;
+
+		case 1://Este
+
+			for(int k=-3; k<=3; k++){
+
+				i =current_state.row+k;
+				j =current_state.col+4;
+
+				if(i<0){
+					i = 0;
+				}
+
+				if(j<0){
+					j = 0;
+				}
+				
+				if(i==map_size){
+					i = map_size-1;
+				}
+
+				if(j==map_size){
+					j = map_size-1;
+				}
+
+				if(mapaResultado[i][j] == '?'){
+					return true;
+				}
+			}
+
+			break;
+
+		case 2://Sur
+
+			for(int k=-3; k<=3; k++){
+
+				i =current_state.row+4;
+				j =current_state.col+k;
+
+				if(i<0){
+					i = 0;
+				}
+
+				if(j<0){
+					j = 0;
+				}
+				
+				if(i==map_size){
+					i = map_size-1;
+				}
+
+				if(j==map_size){
+					j = map_size-1;
+				}
+
+				if(mapaResultado[i][j] == '?'){
+					return true;
+				}
+			}
+
+			break;
+
+		case 3://Oeste
+
+			for(int k=-3; k<=3; k++){
+
+				i =current_state.row+k;
+				j =current_state.col-4;
+
+				if(i<0){
+					i = 0;
+				}
+
+				if(j<0){
+					j = 0;
+				}
+				
+				if(i==map_size){
+					i = map_size-1;
+				}
+
+				if(j==map_size){
+					j = map_size-1;
+				}
+
+				if(mapaResultado[i][j] == '?'){
+					return true;
+				}
+			}
+
+			break;
+
+		default:
+			return false;
+			break;
+	}
+}
+
+
+bool ComportamientoJugador::expensive_position(int position, Sensores sensors){
+	return (sensors.terreno[position] == 'A' || sensors.terreno[position] == 'B');
+}
+
+
+int ComportamientoJugador::nearby_area_to_explore(Sensores sensors){
+	if(is_front_unknown()){
+		return 2;
+	}
+	return 0;
 }
 
 

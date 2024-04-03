@@ -29,7 +29,8 @@ class ComportamientoJugador : public Comportamiento{
 	    passageway_position = NULL_POSITION;
       battery_before_recharge = 0;
       have_pending_action = false;
-      pending_action = actIDLE;    
+      pending_action = actIDLE;  
+      map_size = size;
     }
 
     ComportamientoJugador(const ComportamientoJugador & comport) : Comportamiento(comport){}
@@ -57,6 +58,7 @@ class ComportamientoJugador : public Comportamiento{
     int bikini_position;
     int sneakers_position;
     int passageway_position;
+    unsigned int map_size;
 
     void current_position_checks(Sensores sensors);
 
@@ -89,6 +91,12 @@ class ComportamientoJugador : public Comportamiento{
     bool is_traversable_position(int position, Sensores sensors);
     
     void check_if_charging_mode(Sensores sensors);
+
+    bool is_front_unknown();
+
+    bool expensive_position(int position, Sensores sensors);
+
+    int nearby_area_to_explore(Sensores sensors);
 
     void print_debug_sensors_and_agent_data(Sensores sensors);
 
