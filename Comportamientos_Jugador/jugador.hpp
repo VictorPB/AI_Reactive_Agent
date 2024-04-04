@@ -94,9 +94,7 @@ class ComportamientoJugador : public Comportamiento{
 
     bool is_front_unknown();
 
-    bool expensive_position(int position, Sensores sensors);
-
-    int nearby_area_to_explore(Sensores sensors);
+    bool is_expensive_position(int position, Sensores sensors);
 
     void print_debug_sensors_and_agent_data(Sensores sensors);
 

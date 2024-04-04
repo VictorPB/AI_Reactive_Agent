@@ -76,3 +76,10 @@ do
 	echo -e -n "Nivel $c: " >> $output.dat
     ./practica1SG ./mapas/vertigo.map 0 $c 78 79 0 | tail -n1 >> $output.dat
 done
+
+echo -e "\nMapa: ./mapas/paldea1.map" >> $output.dat
+for (( c=0; c<=4; c+=1 ))
+do
+	echo -e -n "Nivel $c: " >> $output.dat
+    ./practica1SG ./mapas/paldea1.map 0 $c 30 29 0 | tail -n1 >> $output.dat
+done

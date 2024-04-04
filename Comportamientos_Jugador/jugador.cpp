@@ -403,8 +403,7 @@ void ComportamientoJugador::add_cliff_edge_to_map(Sensores sensors){
 
 
 void ComportamientoJugador::identify_interesting_positions(Sensores sensors){
-	
-	target_position = 
+	 
 	recharge_position = 
 	orientation_position = 
 	bikini_position = 
@@ -455,15 +454,16 @@ bool ComportamientoJugador::has_target_position(){
 
 void ComportamientoJugador::set_target_position(Sensores sensors){
 
+	target_position = NULL_POSITION;
+
 	identify_interesting_positions(sensors);
 
 	//If see several interesting positions, select the one that seems to
 	//have the highest priority as the target.
-	
-	// TODO 
-	//if(know_my_position){
-	//	target_position = nearby_area_to_explore(sensors);
-	//}
+
+	if(know_my_position && is_front_unknown()){
+			target_position = 2;
+	}
 
 	if(passageway_position != NULL_POSITION){
 		target_position = passageway_position;
@@ -883,16 +883,8 @@ bool ComportamientoJugador::is_front_unknown(){
 }
 
 
-bool ComportamientoJugador::expensive_position(int position, Sensores sensors){
+bool ComportamientoJugador::is_expensive_position(int position, Sensores sensors){
 	return (sensors.terreno[position] == 'A' || sensors.terreno[position] == 'B');
-}
-
-
-int ComportamientoJugador::nearby_area_to_explore(Sensores sensors){
-	if(is_front_unknown()){
-		return 2;
-	}
-	return 0;
 }
 
 
@@ -953,9 +945,6 @@ void ComportamientoJugador::print_debug_sensors_and_agent_data(Sensores sensors)
 	cout << "Casilla objetivo: " << target_position << endl;
 	cout << endl;
 
-	//cout << "Inicio partida: " << inicio_partida << endl;
-	//cout << "Bien situado: " << bien_situado << endl;
-	//cout << "Frente no explorado: " << frente_no_exp << endl;
 	cout << "Zapatillas: " << has_sneakers << endl;
 	cout << "Bikini: " << has_bikini << endl;
 	cout << endl;
